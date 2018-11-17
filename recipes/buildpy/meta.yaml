@@ -1,0 +1,44 @@
+{% set name = "buildpy" %}
+{% set version = "6.2.4" %}
+{% set sha256 = "018443ed7dccf68572f97b31b06645b6d535281747f72edca38af9ed44c8f01f" %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+source:
+  url: https://files.pythonhosted.org/packages/{{ sha256[0:2] }}/{{ sha256[2:4] }}/{{ sha256[4:] }}/{{ name }}-{{ version }}.tar.gz
+  sha256: {{ sha256 }}
+
+build:
+  noarch: python
+  number: 0
+  script: "{{ PYTHON }} -m pip install . --no-deps --ignore-installed -vvv"
+  skip: True  # [py<36]
+
+requirements:
+  host:
+    - google-cloud-bigquery
+    - google-cloud-storage
+    - pip
+    - psutil
+    - python
+  run:
+    - google-cloud-bigquery
+    - google-cloud-storage
+    - psutil
+    - python
+
+test:
+  imports:
+    - buildpy.vx
+
+about:
+  home: http://github.com/kshramt/{{ name }}
+  license: GLP-3.0
+  license_file: LICENSE.txt
+  summary: 'A workflow engine in Python'
+
+extra:
+  recipe-maintainers:
+    - kshramt
